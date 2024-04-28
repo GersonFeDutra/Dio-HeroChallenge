@@ -1,9 +1,13 @@
 <h1>
-    <img src="./screenshot.png">
+    <a href="https://gersonfedutra.itch.io/hero-level-classifier">
+        <img src="./screenshot.png">
+    </a>
     <p>1️⃣ Desafio: Classificador de nível de Herói</p>
 </h1>
 
 Desafio do curso de Desenvolvimento de Jogos da plataforma DIO.me.
+
+Implementação no [motor de jogos Godot](https://godotengine.org/). Experimente na [página do Itch.io](https://gersonfedutra.itch.io/hero-level-classifier).
 
 **O Que deve ser utilizado**
 

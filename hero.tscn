@@ -1,0 +1,210 @@
+[gd_scene load_steps=14 format=3 uid="uid://blnvcs84j4gw3"]
+
+[ext_resource type="Script" path="res://hero.gd" id="1_8gs68"]
+[ext_resource type="Texture2D" uid="uid://c18c54nd43wcx" path="res://portrait.png" id="2_t887k"]
+
+[sub_resource type="Shader" id="Shader_gjjwl"]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+
+void fragment()
+{
+	float _grad = texture(tex, UV).r;
+    COLOR.rgb *= sin(_grad * PI / 2.0);
+}"
+
+[sub_resource type="Gradient" id="Gradient_xapyq"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wl7rt"]
+gradient = SubResource("Gradient_xapyq")
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4f3iq"]
+shader = SubResource("Shader_gjjwl")
+shader_parameter/tex = SubResource("GradientTexture2D_wl7rt")
+
+[sub_resource type="GDScript" id="GDScript_swply"]
+script/source = "extends ColorRect
+"
+
+[sub_resource type="GDScript" id="GDScript_7xduy"]
+script/source = "extends ColorRect
+
+const HANKS := {
+	\"Iron\": Color(\"#e67147\"),
+	\"Bronze\": Color(\"#e3444c\"),
+	\"Silver\": Color(\"#99acb0\"),
+	\"Gold\": Color(\"#c9a949\"),
+	\"Platinum\": Color(\"#799c89\"),
+	\"Ascendant\": Color(\"#7e6ee6\"),
+	\"Imortal\": Color(\"#533a63\"),
+	\"Radiant\": Color(\"#ffbfc0\"),
+}
+
+var current_color: Color
+
+func change_color(to_hank: String) -> void:
+	print(to_hank)
+	var to: Color = HANKS[to_hank]
+	var tween := get_tree().create_tween()\\
+			.bind_node(self)\\
+			.set_trans(Tween.TRANS_SINE)\\
+			.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, \"color\", to, 1.0)
+"
+
+[sub_resource type="Shader" id="Shader_bvl05"]
+code = "shader_type canvas_item;
+uniform sampler2D bg: source_color;
+
+void fragment() {
+	if (COLOR.a < 1.0) {
+		COLOR.a = 1.0;
+		COLOR.rgba = texture(bg, UV);
+	}
+}
+"
+
+[sub_resource type="Gradient" id="Gradient_dp78m"]
+colors = PackedColorArray(0.498039, 0.27451, 0.631373, 1, 0.352941, 0.588235, 0.486275, 0.466667)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gg4es"]
+gradient = SubResource("Gradient_dp78m")
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ge2gi"]
+shader = SubResource("Shader_bvl05")
+shader_parameter/bg = SubResource("GradientTexture2D_gg4es")
+
+[sub_resource type="GDScript" id="GDScript_3xib7"]
+script/source = "extends LineEdit
+
+signal update_text(String)
+@onready var default_text: String = %Hero.text
+
+func _on_text_changed(new_text: String) -> void:
+	if new_text:
+		new_text = new_text.capitalize()
+	else:
+		new_text = default_text
+	
+	update_text.emit(new_text)
+"
+
+[node name="Hero" type="Node"]
+script = ExtResource("1_8gs68")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_4f3iq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.626374, 0.273989, 0.632703, 0.564706)
+script = SubResource("GDScript_swply")
+
+[node name="Portrait" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.5
+offset_top = -137.5
+offset_right = 137.5
+offset_bottom = 137.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.901961, 0.443137, 0.278431, 1)
+script = SubResource("GDScript_7xduy")
+
+[node name="Portrait" type="TextureRect" parent="Portrait"]
+material = SubResource("ShaderMaterial_ge2gi")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_t887k")
+
+[node name="Inputs" type="HBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.724
+anchor_right = 0.5
+anchor_bottom = 0.724
+offset_left = -146.0
+offset_top = -0.152039
+offset_right = 165.0
+offset_bottom = 30.848
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+metadata/_edit_group_ = true
+
+[node name="NameLabel" type="Label" parent="Inputs"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Name:"
+horizontal_alignment = 1
+
+[node name="Name" type="LineEdit" parent="Inputs"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+placeholder_text = "HERO"
+max_length = 8
+script = SubResource("GDScript_3xib7")
+
+[node name="XPLabel" type="Label" parent="Inputs"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "XP:"
+horizontal_alignment = 1
+
+[node name="XP" type="SpinBox" parent="Inputs"]
+layout_mode = 2
+size_flags_horizontal = 6
+max_value = 99999.0
+
+[node name="Output" type="HBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -178.0
+offset_right = 128.0
+offset_bottom = -138.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Hero" type="Label" parent="Output"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Hero"
+
+[node name="HankLabel" type="Label" parent="Output"]
+layout_mode = 2
+text = "hank:"
+
+[node name="Hank" type="Label" parent="Output"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DEFAULT"
+
+[connection signal="text_changed" from="Inputs/Name" to="Inputs/Name" method="_on_text_changed"]
+[connection signal="update_text" from="Inputs/Name" to="." method="set_hero_name"]
+[connection signal="value_changed" from="Inputs/XP" to="." method="set_hero_xp"]

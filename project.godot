@@ -11,5 +11,10 @@ config_version=5
 [application]
 
 config/name="Dio - Desafio Classificador de Nível de Herói"
+run/main_scene="res://hero.tscn"
 config/features=PackedStringArray("4.2")
 config/icon="res://icon.png"
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.351802, 0.586507, 0.485946, 1)

@@ -1,3 +1,9 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1714283168
+::res://::1714342742
+export_presets.cfg::TextFile::-1::1714296859::0::1::::<><>::
+hero.gd::GDScript::-1::1714342524::0::1::::<>Node<>::
+hero.tscn::PackedScene::3186614500679790072::1714342732::0::1::::<><>::res://hero.gd<>uid://c18c54nd43wcx::::res://portrait.png
 icon.png::CompressedTexture2D::122654661642933265::1714283147::1714283169::1::::<><>::
+portrait.png::CompressedTexture2D::6666052319097494147::1714285984::1714286041::1::::<><>::
+README.md::TextFile::-1::1714293217::0::1::::<><>::
+screenshot.png::::-1::0::0::0::::<><>::

@@ -1,7 +1,7 @@
 extends Node
 
 const HANKS := {
-	1000: "Iron",
+	999: "Iron",
 	2000: "Bronze",
 	5000: "Silver",
 	7000: "Gold",
@@ -23,7 +23,7 @@ func set_hero_xp(value: int) -> void:
 	hero_xp = value
 	
 	for hank: int in ordered_hanks:
-		if hero_xp < hank:
+		if hero_xp <= hank:
 			self.current_hank = HANKS[hank]
 			break
 
@@ -45,4 +45,3 @@ var current_hank = HANKS[HANKS.keys()[0]]:
 ## Infinity Integer: Max int value
 const INFI = 9223372036854775807
 #endregion
-
